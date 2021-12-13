@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.netology.model.Post;
 import ru.netology.service.PostService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
@@ -42,6 +43,10 @@ public class PostController {
   public void removeById(long id, HttpServletResponse response) throws IOException {
     response.setContentType(APPLICATION_JSON);
     final var data = service.removeById(id);
+    if (data==null){
+      response.sendError(400,"Нет такой записи");
+      return;
+    }
     final var gson = new Gson();
     response.getWriter().print(gson.toJson(data));
   }

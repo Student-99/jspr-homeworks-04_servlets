@@ -39,10 +39,23 @@ public class PostRepository {
     }
 
     public Post removeById(long id) {
-        return postMap.remove(id);
+        Long idPost = getKeyByIdValue(postMap, id);
+        if (null != idPost) {
+            return postMap.remove(idPost);
+        }
+        return null;
     }
 
-    private <Long, Post> Long getKeyByValue(Map<Long, Post> map, Post value) {
+    private Long getKeyByIdValue(Map<Long, Post> map, long idValue) {
+        for (Map.Entry<Long, Post> entry : map.entrySet()) {
+            if (idValue == entry.getValue().getId()) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    private Long getKeyByValue(Map<Long, Post> map, Post value) {
         for (Map.Entry<Long, Post> entry : map.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
