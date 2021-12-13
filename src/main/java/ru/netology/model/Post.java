@@ -1,5 +1,7 @@
 package ru.netology.model;
 
+import java.util.Objects;
+
 public class Post {
   private long id;
   private String content;
@@ -27,4 +29,17 @@ public class Post {
   public void setContent(String content) {
     this.content = content;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Post post = (Post) o;
+    return id == post.id;
+  }
+
 }

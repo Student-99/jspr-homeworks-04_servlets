@@ -30,13 +30,13 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final var path = req.getRequestURI();
 
-        if (path.equals("/api/get")) {
+        if (path.equals("/api/get")||path.equals("/")) {
             controller.all(resp);
             return;
         }
         if (path.matches("/api/get/\\d+")) {
             // easy way
-            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
+            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")+1));
             controller.getById(id, resp);
             return;
         }
