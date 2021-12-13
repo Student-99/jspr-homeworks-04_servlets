@@ -36,7 +36,7 @@ public class MainServlet extends HttpServlet {
         }
         if (path.matches("/api/get/\\d+")) {
             // easy way
-            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")+1));
+            final var id = getIdFromURL(path);
             controller.getById(id, resp);
             return;
         }
@@ -58,7 +58,7 @@ public class MainServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final var path = req.getRequestURI();
         if (path.matches("/api/delete/\\d+")) {
-            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")+1));
+            final var id = getIdFromURL(path);
             controller.removeById(id, resp);
             return;
         }
@@ -83,6 +83,10 @@ public class MainServlet extends HttpServlet {
         }
 
        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    private long getIdFromURL(String url){
+       return Long.parseLong(url.substring(url.lastIndexOf("/")+1));
     }
 }
 
