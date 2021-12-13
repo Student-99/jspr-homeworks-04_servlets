@@ -57,8 +57,8 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final var path = req.getRequestURI();
-        if (path.matches("/api/posts/\\d+")) {
-            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
+        if (path.matches("/api/delete/\\d+")) {
+            final var id = Long.parseLong(path.substring(path.lastIndexOf("/")+1));
             controller.removeById(id, resp);
             return;
         }
