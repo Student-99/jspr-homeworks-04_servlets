@@ -4,9 +4,7 @@ import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.PostRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostService {
     private final PostRepository repository;
