@@ -1,6 +1,5 @@
 package ru.netology.model;
 
-import java.util.Objects;
 
 public class Post {
   private long id;
