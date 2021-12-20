@@ -29,7 +29,8 @@ public class PostRepository {
         } else {
             if (postMap.containsValue(post)) {
                 long key = getKeyByValue(postMap, post);
-                return postMap.replace(key, post);
+                postMap.replace(key, post);
+                return postMap.get(key);
             } else {
                 return createPost(post);
             }
