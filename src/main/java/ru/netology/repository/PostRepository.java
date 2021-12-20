@@ -3,18 +3,17 @@ package ru.netology.repository;
 import ru.netology.model.Post;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class PostRepository {
     private ConcurrentMap<Long, Post> postMap = new ConcurrentHashMap<>();
-    private long id = 0;
+    private AtomicLong id = new AtomicLong(0);
 
     public List<Post> all() {
         return new ArrayList(postMap.values());
@@ -26,16 +25,15 @@ public class PostRepository {
 
     public Post save(Post post) {
         if (post.getId() == 0) {
-            createPost(post);
+            return createPost(post);
         } else {
             if (postMap.containsValue(post)) {
                 long key = getKeyByValue(postMap, post);
-                postMap.replace(key, post);
+                return postMap.replace(key, post);
             } else {
-                createPost(post);
+                return createPost(post);
             }
         }
-        return post;
     }
 
     public Post removeById(long id) {
@@ -64,7 +62,10 @@ public class PostRepository {
         return null;
     }
 
-    private void createPost(Post post) {
-        postMap.put(++id, post);
+    private Post createPost(Post post) {
+        long currentId = id.incrementAndGet();
+        post.setId(currentId);
+        postMap.put(currentId, post);
+        return post;
     }
 }
