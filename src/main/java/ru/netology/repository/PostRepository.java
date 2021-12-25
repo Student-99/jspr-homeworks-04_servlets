@@ -1,5 +1,6 @@
 package ru.netology.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.netology.model.Post;
 
 import java.util.ArrayList;
@@ -11,28 +12,43 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
 public class PostRepository {
     private ConcurrentMap<Long, Post> postMap = new ConcurrentHashMap<>();
     private AtomicLong id = new AtomicLong(0);
 
     public List<Post> all() {
-        return new ArrayList(postMap.values());
+        ArrayList<Post> posts = new ArrayList<>();
+        for (Post post:postMap.values()){
+            if (!post.isArchived()){
+                posts.add(post);
+            }
+        }
+        return posts;
     }
 
     public Optional<Post> getById(long id) {
-        return Optional.of(postMap.get(id));
+        Post post = postMap.get(id);
+        if (post==null || post.isArchived()) {
+            return Optional.empty();
+        }
+        return Optional.of(post);
     }
 
-    public Post save(Post post) {
+    public Optional<Post> save(Post post) {
         if (post.getId() == 0) {
-            return createPost(post);
+            return Optional.of(createPost(post));
         } else {
             if (postMap.containsValue(post)) {
                 long key = getKeyByValue(postMap, post);
-                postMap.replace(key, post);
-                return postMap.get(key);
+                Post currentPost = postMap.get(key);
+                if (currentPost.isArchived()){
+                    return null;
+                }
+                currentPost.replace(post);
+                return Optional.of(currentPost);
             } else {
-                return createPost(post);
+                return Optional.of(createPost(post));
             }
         }
     }
@@ -40,7 +56,9 @@ public class PostRepository {
     public Post removeById(long id) {
         Long idPost = getKeyByIdValue(postMap, id);
         if (null != idPost) {
-            return postMap.remove(idPost);
+            Post post = postMap.get(idPost);
+            post.setArchived(true);
+            return post;
         }
         return null;
     }
@@ -66,6 +84,7 @@ public class PostRepository {
     private Post createPost(Post post) {
         long currentId = id.incrementAndGet();
         post.setId(currentId);
+        post.setArchived(false);
         postMap.put(currentId, post);
         return post;
     }

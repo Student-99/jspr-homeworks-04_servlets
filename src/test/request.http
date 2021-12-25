@@ -1,4 +1,10 @@
-GET http://localhost:8080/api/posts
+POST http://localhost:8080/api/posts
+Content-Type: application/json
+
+{
+  "id": 0,
+  "content": "Last Post1"
+}
 
 ###
 
@@ -7,5 +13,34 @@ Content-Type: application/json
 
 {
   "id": 0,
-  "content": "Last Post"
+  "content": "Last Post2"
 }
+
+###
+
+DELETE http://localhost:8080/api/delete/1
+
+###
+POST http://localhost:8080/api/posts
+Content-Type: application/json
+
+{
+  "id": 1,
+  "content": "Last Post1 deleted"
+}
+
+###
+POST http://localhost:8080/api/posts
+Content-Type: application/json
+
+{
+  "id": 2,
+  "content": "Last Post2 no deleted"
+}
+
+###
+
+GET http://localhost:8080/api/get/1
+
+
+###
