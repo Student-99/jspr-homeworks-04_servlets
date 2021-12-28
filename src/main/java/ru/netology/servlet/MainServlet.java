@@ -27,11 +27,11 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final var path = req.getRequestURI();
 
-        if (path.equals("/api/get")||path.equals("/")) {
+        if (path.equals("/api/posts")||path.equals("/")) {
             controller.all(resp);
             return;
         }
-        if (path.matches("/api/get/\\d+")) {
+        if (path.matches("/api/posts/\\d+")) {
             // easy way
             final var id = getIdFromURL(path);
             controller.getById(id, resp);
